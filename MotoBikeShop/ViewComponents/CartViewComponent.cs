@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MotoBikeShop.Helpers;
 using MotoBikeShop.ViewModels;
-namespace WebBanHang.ViewComponents
+namespace MotoBikeShop.ViewComponents
 {
     public class CartViewComponent : ViewComponent
     {

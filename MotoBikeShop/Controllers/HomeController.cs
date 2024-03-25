@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using MotoBikeShop.Models;
 using System.Diagnostics;
+using MotoBikeShop.Models;
 
 namespace MotoBikeShop.Controllers
 {
@@ -14,6 +14,11 @@ namespace MotoBikeShop.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+        [Route("/404")]
+           public IActionResult PageNotFound()
         {
             return View();
         }

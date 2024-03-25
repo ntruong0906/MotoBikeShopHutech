@@ -2,7 +2,7 @@
 using MotoBikeShop.Data;
 using MotoBikeShop.ViewModels;
 
-namespace WebBanHang.ViewComponents
+namespace MotoBikeShop.ViewComponents
 {
     public class MenuLoaiViewComponent : ViewComponent
     {

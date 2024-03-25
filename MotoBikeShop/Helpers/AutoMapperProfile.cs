@@ -2,7 +2,7 @@
 using MotoBikeShop.Data;
 using MotoBikeShop.ViewModels;
 
-namespace WebBanHang.Helpers
+namespace MotoBikeShop.Helpers
 {
     public class AutoMapperProfile : Profile
     {

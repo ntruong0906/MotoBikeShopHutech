@@ -2,7 +2,42 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body>
+
+    <div class="slideshow-container">
+        <div class="slide">
+            <img src="https://cdn.honda.com.vn/motorbikes/November2023/kNVJB3JFDcUks35GBavy.png" alt="Slide 1">
+        </div>
+        <div class="slide">
+            <img src="https://cdn.honda.com.vn/motorbikes/November2023/up2hFvPM9db0M1N5m3fY.jpg" alt="Slide 1">
+        </div>
+    </div>
+    <script>
+        let slideIndex = 0;
+        let slides = document.getElementsByClassName("slide");
+
+        function showSlide() {
+            // Ẩn tất cả các ảnh trong slideshow
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+
+            // Hiển thị chỉ ảnh hiện tại
+            slides[slideIndex].style.display = "block";
+
+            // Tăng chỉ số của ảnh hiện tại
+            slideIndex++;
+
+            // Nếu đến cuối slide show, quay lại ảnh đầu tiên
+            if (slideIndex === slides.length) {
+                slideIndex = 0;
+            }
+
+            // Chuyển đổi ảnh sau 3 giây (3000 milliseconds)
+            setTimeout(showSlide, 3000);
+        }
+
+        // Bắt đầu slide show khi tài liệu HTML đã tải
+        document.addEventListener("DOMContentLoaded", showSlide);
+    </script>
+</body>

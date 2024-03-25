@@ -1,16 +1,31 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using MotoBikeShop.Data;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MotoBikeShop.Repository
 {
-    public class Repository<T> : IRepository<T>
+    public class Repository<T> where T : class
     {
+        private readonly motoBikeShopDbContext _context;
+
+        public Repository(motoBikeShopDbContext context)
+        {
+            _context = context;
+        }
         public async Task<IEnumerable<T>> GetAll()
         {
             // Thực hiện lấy tất cả các đối tượng T từ nguồn dữ liệu
             await Task.Delay(1000); // Giả định là lấy dữ liệu mất 1 giây
             var data = new List<T>(); // Dữ liệu sau khi lấy được từ nguồn dữ liệu
+            return data;
+        }
+        public async Task<IEnumerable<Loai>> GetAllLoai()
+        {
+            // Thực hiện lấy tất cả các đối tượng Loai từ nguồn dữ liệu
+            await Task.Delay(1000); // Giả định là lấy dữ liệu mất 1 giây
+            var data = new List<Loai>(); // Dữ liệu Loai sau khi lấy được từ nguồn dữ liệu
             return data;
         }
 
@@ -30,12 +45,11 @@ namespace MotoBikeShop.Repository
             return data;
         }
 
-        public async Task<T> Create(T entity)
+        public async Task<T> Create(T entity) 
         {
-            // Thực hiện tạo mới đối tượng T trong nguồn dữ liệu
-            await Task.Delay(500); // Giả định là tạo mới mất 0.5 giây
-            var newEntity = entity; // Đối tượng T sau khi được tạo mới trong nguồn dữ liệu
-            return newEntity;
+            _context.Set<T>().Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
         public async Task<bool> DeleteTypeInt(int id)
@@ -81,6 +95,16 @@ namespace MotoBikeShop.Repository
         }
 
         public Task<T> UpdateTypeString(string id, T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<T>> GetAllNhaCungCap()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExistsTypeInt(int maHh)
         {
             throw new NotImplementedException();
         }
