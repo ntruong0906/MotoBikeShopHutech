@@ -197,12 +197,12 @@ sup {
 }
 
 a {
-    color: #81c408;
+    color: #dc3545;
     text-decoration: none
 }
 
     a:hover {
-        color: #679d06
+        color: #dc3545
     }
 
     a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -245,7 +245,7 @@ kbd {
     padding: .2rem .4rem;
     font-size: 0.875em;
     color: #fff;
-    background-color: #212529;
+    background-color: #dc3545;
     border-radius: 10px
 }
 
@@ -2935,8 +2935,8 @@ textarea.form-control-lg {
 
     .btn-check:checked + .btn-primary, .btn-check:active + .btn-primary, .btn-primary:active, .btn-primary.active, .show > .btn-primary.dropdown-toggle {
         color: #000;
-        background-color: #9ad039;
-        border-color: #8eca21
+        background-color: #dc3545;
+        border-color: #dc3545
     }
 
         .btn-check:checked + .btn-primary:focus, .btn-check:active + .btn-primary:focus, .btn-primary:active:focus, .btn-primary.active:focus, .show > .btn-primary.dropdown-toggle:focus {
@@ -2945,8 +2945,8 @@ textarea.form-control-lg {
 
     .btn-primary:disabled, .btn-primary.disabled {
         color: #000;
-        background-color: #81c408;
-        border-color: #81c408
+        background-color: #dc3545;
+        border-color: #dc3545
     }
 
 .btn-secondary {
@@ -3973,7 +3973,7 @@ textarea.form-control-lg {
         }
 
         .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
-            color: #495057;
+            color: #dc3545;
             background-color: #fff;
             border-color: #dee2e6 #dee2e6 #fff
         }
@@ -3992,7 +3992,7 @@ textarea.form-control-lg {
 
     .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
         color: #fff;
-        background-color: #81c408
+        background-color: #dc3545
     }
 
 .nav-fill > .nav-link, .nav-fill .nav-item {

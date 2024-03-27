@@ -1,25 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace MotoBikeShop.Data;
-
-public partial class NhaCungCap
+namespace MotoBikeShop.Data
 {
-    public string MaNcc { get; set; } = null!;
+    public class NhaCungCap
+    {
+        [Key]
+        public string MaNCC { get; set; }
 
-    public string TenCongTy { get; set; } = null!;
+        [Required]
+        [MaxLength(50)]
+        public string TenCongTy { get; set; }
 
-    public string Logo { get; set; } = null!;
+        [Required]
+        [MaxLength(50)]
+        public string Logo { get; set; }
 
-    public string? NguoiLienLac { get; set; }
+        [MaxLength(50)]
+        public string NguoiLienLac { get; set; }
 
-    public string Email { get; set; } = null!;
+        [Required]
+        [MaxLength(50)]
+        public string Email { get; set; }
 
-    public string? DienThoai { get; set; }
+        [MaxLength(50)]
+        public string DienThoai { get; set; }
 
-    public string? DiaChi { get; set; }
+        [MaxLength(50)]
+        public string DiaChi { get; set; }
 
-    public string? MoTa { get; set; }
-
-    public virtual ICollection<HangHoa> HangHoas { get; set; } = new List<HangHoa>();
+        public string MoTa { get; set; }
+    }
 }

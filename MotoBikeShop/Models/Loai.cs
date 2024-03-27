@@ -1,19 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MotoBikeShop.Data;
-
-public partial class Loai
+namespace MotoBikeShop.Data
 {
-    public int MaLoai { get; set; }
+    public class Loai
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MaLoai { get; set; }
 
-    public string TenLoai { get; set; } = null!;
+        [Required]
+        [MaxLength(50)]
+        public string TenLoai { get; set; }
 
-    public string? TenLoaiAlias { get; set; }
+        [MaxLength(50)]
+        public string TenLoaiAlias { get; set; }
 
-    public string? MoTa { get; set; }
+        public string MoTa { get; set; }
 
-    public string? Hinh { get; set; }
-
-    public virtual ICollection<HangHoa> HangHoas { get; set; } = new List<HangHoa>();
+        [MaxLength(50)]
+        public string Hinh { get; set; }
+    }
 }

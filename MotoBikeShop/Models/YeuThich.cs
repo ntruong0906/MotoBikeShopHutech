@@ -1,20 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MotoBikeShop.Data;
-public partial class YeuThich
+namespace MotoBikeShop.Data
 {
-    public int MaYt { get; set; }
+    public class YeuThich
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MaYT { get; set; }
 
-    public int? MaHh { get; set; }
+        public int? MaHH { get; set; }
 
-    public string MaKh { get; set; } = null!;
+        [Required]
+        [MaxLength(100)]
+        public string MaKH { get; set; }
 
-    public DateTime? NgayChon { get; set; }
+        public DateTime? NgayChon { get; set; }
 
-    public string? MoTa { get; set; }
+        [MaxLength(255)]
+        public string MoTa { get; set; }
 
-    public virtual HangHoa? MaHhNavigation { get; set; }
 
-    public virtual KhachHang MaKhNavigation { get; set; } = null!;
+        [ForeignKey("MaHH")]
+        public virtual HangHoa HangHoa { get; set; }
+    }
 }

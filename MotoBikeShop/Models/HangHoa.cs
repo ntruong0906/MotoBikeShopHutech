@@ -1,41 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MotoBikeShop.Data;
-
-public partial class HangHoa
+namespace MotoBikeShop.Data
 {
-    public int MaHh { get; set; }
+    public class HangHoa
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MaHH { get; set; }
 
-    public string TenHh { get; set; } = null!;
+        [Required]
+        [MaxLength(50)]
+        public string TenHH { get; set; }
 
-    public string? TenAlias { get; set; }
+        [MaxLength(50)]
+        public string TenAlias { get; set; }
 
-    public int MaLoai { get; set; }
+        public int MaLoai { get; set; }
 
-    public string? MoTaDonVi { get; set; }
+        [MaxLength(50)]
+        public string MoTaDonVi { get; set; }
 
-    public double? DonGia { get; set; }
+        public double? DonGia { get; set; }
 
-    public string? Hinh { get; set; }
+        [MaxLength(50)]
+        public string Hinh { get; set; }
 
-    public DateTime NgaySx { get; set; }
+        [Required]
+        public DateTime NgaySX { get; set; }
 
-    public double GiamGia { get; set; }
+        public double GiamGia { get; set; }
 
-    public int SoLanXem { get; set; }
+        public int SoLanXem { get; set; }
 
-    public string? MoTa { get; set; }
+        public string MoTa { get; set; }
 
-    public string MaNcc { get; set; } = null!;
+        [Required]
+ 
+        public string MaNCC { get; set; }
 
-    public virtual ICollection<BanBe> BanBes { get; set; } = new List<BanBe>();
+        [ForeignKey("MaLoai")]
+        public virtual Loai Loai { get; set; }
 
-    public virtual ICollection<ChiTietHd> ChiTietHds { get; set; } = new List<ChiTietHd>();
+        [ForeignKey("MaNCC")]
+        public virtual NhaCungCap NhaCungCap { get; set; }
 
-    public virtual Loai MaLoaiNavigation { get; set; } = null!;
+        public virtual ICollection<ChiTietHd> ChiTietHds { get; set; } = new List<ChiTietHd>();
 
-    public virtual NhaCungCap MaNccNavigation { get; set; } = null!;
-
-    public virtual ICollection<YeuThich> YeuThiches { get; set; } = new List<YeuThich>();
+        public virtual ICollection<YeuThich> YeuThiches { get; set; } = new List<YeuThich>();
+    }
 }

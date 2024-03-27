@@ -33,12 +33,12 @@
     <div>
         <!-- Spinner Start -->
         <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
-            <div class="spinner-grow text-primary" role="status"></div>
+            <div class="spinner-grow text-danger" role="status"></div>
         </div>
         <!-- Spinner End -->
         <!-- Navbar start -->
         <div class="container-fluid fixed-top">
-            <div class="container topbar bg-primary d-none d-lg-block">
+            <div class="container topbar bg-danger d-none d-lg-block">
                 <div class="d-flex justify-content-between">
                     <div class="top-info ps-2">
                         <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">Hutech Mainpower Training Center</a></small>
@@ -53,36 +53,25 @@
             </div>
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><h1 class="text-primary display-6">MotoBikeShop</h1></a>
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><h1 class="text-danger display-6">MotoBikeShop</h1></a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-primary"></span>
+                        <span class="fa fa-bars text-danger"></span>
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
                             <a id="home-link"  asp-controller="Home" asp-action="Index" class="nav-item nav-link active">Home</a>
                             <a id="shop-link"  asp-controller="HangHoa" asp-action="Index" class="nav-item nav-link">Shop</a>
-                            <a id="resigter-link"  asp-controller="KhachHang" asp-action="DangKy" class="nav-item nav-link">Resigter</a>
-                                  <div class="nav-item dropdown">
+                     
+                                  
                            
                             <a id="contact-link" asp-controller="Contact" asp-action="Index" class="nav-item nav-link ">Contact</a>
-                          
+                            <partial name="_LoginPartial">
 
                         </div>
                         <div class="d-flex m-3 me-0">
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
+                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-danger"></i></button>
                             @await Component.InvokeAsync("Cart")
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <a asp-controller="KhachHang" asp-action="Profile" title="Xem thông tin người dùng" class="my-auto">
-                                    <i class="fas fa-user fa-2x"></i>
-                                </a>
-                            }
-                            else
-                            {
-                                <a asp-action="DangNhap" asp-controller="KhachHang" title="Đăng nhập" class="my-auto">
-                                    <i class="fas fa-user fa-2x"></i>
-                                </a>
-                            }
+                           
                         </div>
                     </div>
                 </nav>
@@ -113,9 +102,10 @@
 
 
         @await Html.PartialAsync("_LayoutFooter");
+
     </div>
     <!-- Back to Top -->
-    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+    <a href="#" class="btn btn-danger border-3 border-danger rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
 
 
     <!-- JavaScript Libraries -->
@@ -153,6 +143,12 @@
                 $(".nav-item").removeClass("active");
                 $("#" + activeNavLink).addClass("active");
             });
+        });
+    </script>
+    <script>
+        $(".nav-item.nav-link").on("click", function () {
+            $(".nav-item.nav-link.active").removeClass('active');
+            $(this).addClass('active');
         });
     </script>
 </body>
