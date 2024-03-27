@@ -14,17 +14,17 @@ namespace MotoBikeShop.Repository
         public async Task<IEnumerable<HangHoa>> GetAllAsync()
         {
             // return await _context.Products.ToListAsync();
-            return await _context.HangHoas.Include(p => p.Loai).ToListAsync();
+            return await _context.HangHoas.Include(p => p.MaLoaiNavigation).ToListAsync();
         }
         public async Task<HangHoa> GetByIdAsync(int id)
         {
             // return await _context.Products.FindAsync(id);
             // lấy thông tin kèm theo category
-            return await _context.HangHoas.Include(p =>p.Loai).FirstOrDefaultAsync(p => p.MaLoai == id);
+            return await _context.HangHoas.Include(p => p.MaLoaiNavigation).FirstOrDefaultAsync(p => p.MaLoai == id);
         }
         public async Task AddAsync(HangHoa product)
         {
-            _context.HangHoas.Add(product);
+            _context.HangHoas.AddAsync(product);
             await _context.SaveChangesAsync();
         }
         public async Task UpdateAsync(HangHoa product)

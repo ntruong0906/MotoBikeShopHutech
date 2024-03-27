@@ -24,12 +24,11 @@ namespace MotoBikeShop.Repository
           
         }
 
-        public async Task<IEnumerable<NhaCungCap>> GetAllAsync()
-            
-        {
-            return await _context.NhaCungCaps.Include(p=>p.MaNCC).ToArrayAsync();
-           
+      
 
+        public async Task<IEnumerable<NhaCungCap>> GetAllAsync()
+        {
+            return await _context.NhaCungCaps.ToListAsync();
         }
 
         public async Task<NhaCungCap> GetByIdAsync(string id)

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MotoBikeShop.Data
 {
@@ -29,5 +30,6 @@ namespace MotoBikeShop.Data
         public string DiaChi { get; set; }
 
         public string MoTa { get; set; }
+       
     }
 }

@@ -28,7 +28,7 @@ namespace MotoBikeShop.Controllers
                 DonGia = p.DonGia ?? 0,
                 Hinh = p.Hinh ?? "",
                 MoTaNgan = p.MoTaDonVi ?? "",
-                TenLoai = p.Loai.TenLoai
+                TenLoai = p.MaLoaiNavigation.TenLoai
             });
             return View(result);
         }
@@ -47,7 +47,7 @@ namespace MotoBikeShop.Controllers
                 DonGia = p.DonGia ?? 0,
                 Hinh = p.Hinh ?? "",
                 MoTaNgan = p.MoTaDonVi ?? "",
-                TenLoai = p.Loai.TenLoai
+                TenLoai = p.MaLoaiNavigation.TenLoai
             });
             return View(result);
         }
@@ -68,7 +68,7 @@ namespace MotoBikeShop.Controllers
                 ChiTiet = data.MoTa ?? String.Empty,
                 Hinh = data.Hinh ?? String.Empty,
                 MoTaNgan = data.MoTaDonVi ?? String.Empty,
-                TenLoai = data.Loai.TenLoai,
+                TenLoai = data.MaLoaiNavigation.TenLoai,
                 SoLuongTon = 10,
                 DiemDanhGia = 5,
 

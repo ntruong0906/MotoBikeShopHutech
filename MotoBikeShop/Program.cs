@@ -24,6 +24,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
+builder.Services.AddScoped<IFactoryRepository, EFFactoryRepository>();
 builder.Services.AddRazorPages();
 builder.Services.AddDistributedMemoryCache();
 

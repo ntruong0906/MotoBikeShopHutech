@@ -41,14 +41,15 @@ namespace MotoBikeShop.Data
  
         public string MaNCC { get; set; }
 
-        [ForeignKey("MaLoai")]
-        public virtual Loai Loai { get; set; }
-
-        [ForeignKey("MaNCC")]
-        public virtual NhaCungCap NhaCungCap { get; set; }
-
         public virtual ICollection<ChiTietHd> ChiTietHds { get; set; } = new List<ChiTietHd>();
 
         public virtual ICollection<YeuThich> YeuThiches { get; set; } = new List<YeuThich>();
+
+        [ForeignKey("MaLoai")]
+        public virtual Loai MaLoaiNavigation { get; set; } = null!;
+
+        [ForeignKey("MaNCC")]
+        public virtual NhaCungCap MaNccNavigation { get; set; } = null!;
+       
     }
 }

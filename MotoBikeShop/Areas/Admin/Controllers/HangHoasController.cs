@@ -28,15 +28,27 @@ namespace MotoBikeShop.Areas.Admin
             return View(product);
         }
         // Hiển thị form thêm sản phẩm mới
-        public async Task<IActionResult> Add()
+        public async Task<IActionResult> Create()
         {
-            var categories = await _categoryRepository.GetAllAsync();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+            var loais = await _categoryRepository.GetAllAsync();
+            if (loais == null)
+            {
+                loais = new List<Loai>(); // khởi tạo một danh sách rỗng nếu loais là null
+            }
+            ViewBag.Loais = new SelectList(loais, "Id", "Name");
+
+            var nhaCungCaps = await _factoryRepository.GetAllAsync();
+            if (nhaCungCaps == null)
+            {
+                nhaCungCaps = new List<NhaCungCap>(); // khởi tạo một danh sách rỗng nếu nhaCungCaps là null
+            }
+            ViewBag.NhaCungCaps = new SelectList(nhaCungCaps, "Id", "Name");
+
             return View();
         }
         // Xử lý thêm sản phẩm mới
         [HttpPost]
-        public async Task<IActionResult> Add(HangHoa product, IFormFile imageUrl)
+        public async Task<IActionResult> Create(HangHoa product, IFormFile imageUrl)
         {
             if (ModelState.IsValid)
             {

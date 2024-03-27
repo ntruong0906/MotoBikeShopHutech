@@ -6,164 +6,74 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MotoBikeShop.Data;
+using MotoBikeShop.Helpers;
+using MotoBikeShop.Repository;
 
 namespace MotoBikeShop.Controllers
 {
     public class HangHoasController : Controller
     {
-        private readonly motoBikeVHDbContext _context;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IFactoryRepository _factoryRepository;
 
-        public HangHoasController(motoBikeVHDbContext context)
+        public HangHoasController(IProductRepository productRepository, ICategoryRepository categoryRepository, IFactoryRepository factoryRepository)
         {
-            _context = context;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
+            _factoryRepository = factoryRepository;
         }
-
-        // GET: HangHoas
         public async Task<IActionResult> Index()
         {
-            var motoBikeVHDbContext = _context.HangHoas.Include(h => h.Loai).Include(h => h.NhaCungCap);
-            return View(await motoBikeVHDbContext.ToListAsync());
+            var product = await _productRepository.GetAllAsync();
+            return View(product);
         }
-
-        // GET: HangHoas/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // Hiển thị form thêm sản phẩm mới
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            if (id == null)
+            var loais = await _categoryRepository.GetAllAsync();
+            if (loais == null)
             {
-                return NotFound();
+                loais = new List<Loai>(); // khởi tạo một danh sách rỗng nếu loais là null
             }
+            ViewBag.Loais = new SelectList(loais, "MaLoai","MaLoai");
 
-            var hangHoa = await _context.HangHoas
-                .Include(h => h.Loai)
-                .Include(h => h.NhaCungCap)
-                .FirstOrDefaultAsync(m => m.MaHH == id);
-            if (hangHoa == null)
+            var nhaCungCaps = await _factoryRepository.GetAllAsync();
+            if (nhaCungCaps == null)
             {
-                return NotFound();
+                nhaCungCaps = new List<NhaCungCap>(); // khởi tạo một danh sách rỗng nếu nhaCungCaps là null
             }
+            ViewBag.NhaCungCaps = new SelectList(nhaCungCaps, "MaNCC","MaNCC");
 
-            return View(hangHoa);
-        }
-
-        // GET: HangHoas/Create
-        public IActionResult Create()
-        {
-            ViewData["MaLoai"] = new SelectList(_context.Loais, "MaLoai", "TenLoai");
-            ViewData["MaNCC"] = new SelectList(_context.NhaCungCaps, "MaNCC", "MaNCC");
             return View();
         }
-
-        // POST: HangHoas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Xử lý thêm sản phẩm mới
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaHH,TenHH,TenAlias,MaLoai,MoTaDonVi,DonGia,Hinh,NgaySX,GiamGia,SoLanXem,MoTa,MaNCC")] HangHoa hangHoa)
+        public async Task<IActionResult> Create(HangHoa product, IFormFile imageUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(hangHoa);
-                await _context.SaveChangesAsync();
+                if (imageUrl != null)
+                {
+                    // Lưu hình ảnh đại diện tham khảo bài 02 hàm SaveImage
+                    product.Hinh = await SaveImage(imageUrl);
+                }
+                await _productRepository.AddAsync(product);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MaLoai"] = new SelectList(_context.Loais, "MaLoai", "TenLoai", hangHoa.MaLoai);
-            ViewData["MaNCC"] = new SelectList(_context.NhaCungCaps, "MaNCC", "MaNCC", hangHoa.MaNCC);
-            return View(hangHoa);
+            return View(product);
         }
-
-        // GET: HangHoas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        private async Task<string> SaveImage(IFormFile image)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var savePath = Path.Combine("wwwroot/images", image.FileName); //Thay đổi đường dẫn theo cấu hình của bạn
 
-            var hangHoa = await _context.HangHoas.FindAsync(id);
-            if (hangHoa == null)
+            using (var fileStream = new FileStream(savePath, FileMode.Create))
             {
-                return NotFound();
+                await image.CopyToAsync(fileStream);
             }
-            ViewData["MaLoai"] = new SelectList(_context.Loais, "MaLoai", "TenLoai", hangHoa.MaLoai);
-            ViewData["MaNCC"] = new SelectList(_context.NhaCungCaps, "MaNCC", "MaNCC", hangHoa.MaNCC);
-            return View(hangHoa);
+            return   image.FileName; // Trả về đường dẫn tương đối
         }
 
-        // POST: HangHoas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaHH,TenHH,TenAlias,MaLoai,MoTaDonVi,DonGia,Hinh,NgaySX,GiamGia,SoLanXem,MoTa,MaNCC")] HangHoa hangHoa)
-        {
-            if (id != hangHoa.MaHH)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(hangHoa);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!HangHoaExists(hangHoa.MaHH))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["MaLoai"] = new SelectList(_context.Loais, "MaLoai", "TenLoai", hangHoa.MaLoai);
-            ViewData["MaNCC"] = new SelectList(_context.NhaCungCaps, "MaNCC", "MaNCC", hangHoa.MaNCC);
-            return View(hangHoa);
-        }
-
-        // GET: HangHoas/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var hangHoa = await _context.HangHoas
-                .Include(h => h.Loai)
-                .Include(h => h.NhaCungCap)
-                .FirstOrDefaultAsync(m => m.MaHH == id);
-            if (hangHoa == null)
-            {
-                return NotFound();
-            }
-
-            return View(hangHoa);
-        }
-
-        // POST: HangHoas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var hangHoa = await _context.HangHoas.FindAsync(id);
-            if (hangHoa != null)
-            {
-                _context.HangHoas.Remove(hangHoa);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool HangHoaExists(int id)
-        {
-            return _context.HangHoas.Any(e => e.MaHH == id);
-        }
     }
 }
