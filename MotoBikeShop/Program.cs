@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MotoBikeShop.Data;
 using MotoBikeShop.Models;
+using MotoBikeShop.Repository;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
  .AddDefaultUI()
  .AddEntityFrameworkStores<motoBikeVHDbContext>();
 
-
+builder.Services.AddScoped<IProductRepository, EFProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 builder.Services.AddRazorPages();
 builder.Services.AddDistributedMemoryCache();
 
@@ -30,7 +32,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "YourSessionCookieName";
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromMinutes(1);
     options.Cookie.IsEssential = true;
 });
 var app = builder.Build();
@@ -56,9 +58,16 @@ app.MapControllerRoute(
  name: "default",
  pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapControllerRoute(
- name: "admin",
- pattern: "{controller=Home}/{action=Index}/{id?}");
+//app.MapControllerRoute(
+// name: "admin",
+// pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+});
 
 
 app.Run();
