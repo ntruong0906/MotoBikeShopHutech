@@ -20,5 +20,6 @@ namespace MotoBikeShop.Data
 
         [MaxLength(50)]
         public string Hinh { get; set; }
+        public virtual ICollection<HangHoa> HangHoas { get; set; } = new List<HangHoa>();
     }
 }
