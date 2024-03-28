@@ -2,93 +2,100 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MotoBikeShop.Data;
+using MotoBikeShop.Models;
 
 namespace MotoBikeShop.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class LoaisController : Controller
+    [Authorize(Roles = SD.Role_Admin)]
+    [Route("admin")]
+    [Route("Factory")]
+    public class FactoryController : Controller
     {
         private readonly motoBikeVHDbContext _context;
 
-        public LoaisController(motoBikeVHDbContext context)
+        public FactoryController(motoBikeVHDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/Loais
+        // GET: Admin/NhaCungCaps
+        [Route("")]
+        [Route("Index")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Loais.ToListAsync());
+            return View(await _context.NhaCungCaps.ToListAsync());
         }
 
-        // GET: Admin/Loais/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Admin/NhaCungCaps/Details/5
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var loai = await _context.Loais
-                .FirstOrDefaultAsync(m => m.MaLoai == id);
-            if (loai == null)
+            var nhaCungCap = await _context.NhaCungCaps
+                .FirstOrDefaultAsync(m => m.MaNCC == id);
+            if (nhaCungCap == null)
             {
                 return NotFound();
             }
 
-            return View(loai);
+            return View(nhaCungCap);
         }
 
-        // GET: Admin/Loais/Create
+        // GET: Admin/NhaCungCaps/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/Loais/Create
+        // POST: Admin/NhaCungCaps/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaLoai,TenLoai,TenLoaiAlias,MoTa,Hinh")] Loai loai)
+        public async Task<IActionResult> Create([Bind("MaNCC,TenCongTy,Logo,NguoiLienLac,Email,DienThoai,DiaChi,MoTa")] NhaCungCap nhaCungCap)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(loai);
+                _context.Add(nhaCungCap);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(loai);
+            return View(nhaCungCap);
         }
 
-        // GET: Admin/Loais/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Admin/NhaCungCaps/Edit/5
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var loai = await _context.Loais.FindAsync(id);
-            if (loai == null)
+            var nhaCungCap = await _context.NhaCungCaps.FindAsync(id);
+            if (nhaCungCap == null)
             {
                 return NotFound();
             }
-            return View(loai);
+            return View(nhaCungCap);
         }
 
-        // POST: Admin/Loais/Edit/5
+        // POST: Admin/NhaCungCaps/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaLoai,TenLoai,TenLoaiAlias,MoTa,Hinh")] Loai loai)
+        public async Task<IActionResult> Edit(string id, [Bind("MaNCC,TenCongTy,Logo,NguoiLienLac,Email,DienThoai,DiaChi,MoTa")] NhaCungCap nhaCungCap)
         {
-            if (id != loai.MaLoai)
+            if (id != nhaCungCap.MaNCC)
             {
                 return NotFound();
             }
@@ -97,12 +104,12 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(loai);
+                    _context.Update(nhaCungCap);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LoaiExists(loai.MaLoai))
+                    if (!NhaCungCapExists(nhaCungCap.MaNCC))
                     {
                         return NotFound();
                     }
@@ -113,45 +120,45 @@ namespace MotoBikeShop.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(loai);
+            return View(nhaCungCap);
         }
 
-        // GET: Admin/Loais/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Admin/NhaCungCaps/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var loai = await _context.Loais
-                .FirstOrDefaultAsync(m => m.MaLoai == id);
-            if (loai == null)
+            var nhaCungCap = await _context.NhaCungCaps
+                .FirstOrDefaultAsync(m => m.MaNCC == id);
+            if (nhaCungCap == null)
             {
                 return NotFound();
             }
 
-            return View(loai);
+            return View(nhaCungCap);
         }
 
-        // POST: Admin/Loais/Delete/5
+        // POST: Admin/NhaCungCaps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var loai = await _context.Loais.FindAsync(id);
-            if (loai != null)
+            var nhaCungCap = await _context.NhaCungCaps.FindAsync(id);
+            if (nhaCungCap != null)
             {
-                _context.Loais.Remove(loai);
+                _context.NhaCungCaps.Remove(nhaCungCap);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LoaiExists(int id)
+        private bool NhaCungCapExists(string id)
         {
-            return _context.Loais.Any(e => e.MaLoai == id);
+            return _context.NhaCungCaps.Any(e => e.MaNCC == id);
         }
     }
 }

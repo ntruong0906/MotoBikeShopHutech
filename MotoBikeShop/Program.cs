@@ -14,7 +14,7 @@ builder.Services.AddDbContext<motoBikeVHDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -62,11 +62,18 @@ app.MapControllerRoute(
 //app.MapControllerRoute(
 // name: "admin",
 // pattern: "{controller=Home}/{action=Index}/{id?}");
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute(
+//      name: "areas",
+//      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+//    );
+//});
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-      name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+        name: "admin",
+        pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}"
     );
 });
 

@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
-@{
+@* @{
     var isAdmin = User.Identity.IsAuthenticated && User.IsInRole("Admin");
     Layout = isAdmin ? "~/Views/Shared/_LayoutAdmin.cshtml" : "~/Views/Shared/_LayoutCustomer.cshtml";
 
@@ -9,4 +9,8 @@
         // Clear the user's authentication cookies when not an admin
         await Context.SignOutAsync();
     }
+} *@
+
+@{
+    Layout = "_LayoutCustomer";
 }
