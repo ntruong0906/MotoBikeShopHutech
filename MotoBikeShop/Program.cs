@@ -25,6 +25,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 builder.Services.AddScoped<IFactoryRepository, EFFactoryRepository>();
+//builder.Services.AddScoped<ICartService,EFCartService>();
 builder.Services.AddRazorPages();
 builder.Services.AddDistributedMemoryCache();
 
@@ -33,7 +34,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "YourSessionCookieName";
-    options.IdleTimeout = TimeSpan.FromMinutes(1);
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
     options.Cookie.IsEssential = true;
 });
 var app = builder.Build();
@@ -75,6 +76,13 @@ app.UseEndpoints(endpoints =>
         name: "admin",
         pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}"
     );
+});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+             name: "updateQuantity",
+             pattern: "CartController/UpdateQuantity/{id}/{quantity}",
+             defaults: new { controller = "Cart", action = "UpdateQuantity" });
 });
 
 

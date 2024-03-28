@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MotoBikeShop.Data;
 
@@ -11,9 +12,11 @@ using MotoBikeShop.Data;
 namespace MotoBikeShop.Migrations
 {
     [DbContext(typeof(motoBikeVHDbContext))]
-    partial class motoBikeVHDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240328131900_updatehoadon")]
+    partial class updatehoadon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,7 +260,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC002",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 28, 23, 38, 22, 428, DateTimeKind.Local).AddTicks(6242),
+                            NgaySX = new DateTime(2024, 3, 28, 20, 18, 59, 885, DateTimeKind.Local).AddTicks(6465),
                             SoLanXem = 99,
                             TenAlias = "exciter",
                             TenHH = "Exciter"
@@ -272,7 +275,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC001",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 28, 23, 38, 22, 428, DateTimeKind.Local).AddTicks(6257),
+                            NgaySX = new DateTime(2024, 3, 28, 20, 18, 59, 885, DateTimeKind.Local).AddTicks(6482),
                             SoLanXem = 99,
                             TenAlias = "vario",
                             TenHH = "Vario"
@@ -287,7 +290,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC003",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 28, 23, 38, 22, 428, DateTimeKind.Local).AddTicks(6260),
+                            NgaySX = new DateTime(2024, 3, 28, 20, 18, 59, 885, DateTimeKind.Local).AddTicks(6483),
                             SoLanXem = 99,
                             TenAlias = "wave-rsx",
                             TenHH = "Wave RSX"
@@ -346,11 +349,16 @@ namespace MotoBikeShop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TrangThaiMaTrangThai")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MaHD");
+
+                    b.HasIndex("TrangThaiMaTrangThai");
 
                     b.HasIndex("UserId");
 
@@ -600,7 +608,25 @@ namespace MotoBikeShop.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-       
+            modelBuilder.Entity("MotoBikeShop.Models.TrangThai", b =>
+                {
+                    b.Property<int>("MaTrangThai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaTrangThai"));
+
+                    b.Property<string>("MoTa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenTrangThai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MaTrangThai");
+
+                    b.ToTable("TrangThais");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -693,6 +719,10 @@ namespace MotoBikeShop.Migrations
 
             modelBuilder.Entity("MotoBikeShop.Data.HoaDon", b =>
                 {
+                    b.HasOne("MotoBikeShop.Models.TrangThai", null)
+                        .WithMany("HoaDons")
+                        .HasForeignKey("TrangThaiMaTrangThai");
+
                     b.HasOne("MotoBikeShop.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -711,8 +741,6 @@ namespace MotoBikeShop.Migrations
                     b.Navigation("HangHoa");
                 });
 
-           
-
             modelBuilder.Entity("MotoBikeShop.Data.HangHoa", b =>
                 {
                     b.Navigation("ChiTietHds");
@@ -723,13 +751,16 @@ namespace MotoBikeShop.Migrations
             modelBuilder.Entity("MotoBikeShop.Data.HoaDon", b =>
                 {
                     b.Navigation("ChiTietHds");
-
-                
                 });
 
             modelBuilder.Entity("MotoBikeShop.Data.Loai", b =>
                 {
                     b.Navigation("HangHoas");
+                });
+
+            modelBuilder.Entity("MotoBikeShop.Models.TrangThai", b =>
+                {
+                    b.Navigation("HoaDons");
                 });
 #pragma warning restore 612, 618
         }

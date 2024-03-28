@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MotoBikeShop.Models;
+using MotoBikeShop.ViewModels;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,6 +44,12 @@ namespace MotoBikeShop.Data
 
         public string GhiChu { get; set; }
 
+        public string PhoneNumber { get; set; }
+       
+        public string UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public virtual ApplicationUser User { get; set; }
         public virtual ICollection<ChiTietHd> ChiTietHds { get; set; } = new List<ChiTietHd>();
     }
 }

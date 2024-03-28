@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -44,11 +46,11 @@
                         <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">Hutech Mainpower Training Center</a></small>
                         <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">dacviethuynh@gmail.com</a></small>
                     </div>
-                       <div class="top-link pe-2">
+                    <div class="top-link pe-2">
                         <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
                         <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
                         <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <div class="container px-0">
@@ -59,11 +61,11 @@
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
-                            <a id="home-link"  asp-controller="Home" asp-action="Index" class="nav-item nav-link active">Home</a>
-                            <a id="shop-link"  asp-controller="HangHoa" asp-action="Index" class="nav-item nav-link">Shop</a>
-                     
-                                  
-                           
+                            <a id="home-link" asp-controller="Home" asp-action="Index" class="nav-item nav-link active">Home</a>
+                            <a id="shop-link" asp-controller="HangHoa" asp-action="Index" class="nav-item nav-link">Shop</a>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="cart-link" href="/Cart/Index">Cart</a>
+                            </li>
                             <a id="contact-link" asp-controller="Contact" asp-action="Index" class="nav-item nav-link ">Contact</a>
                             <partial name="_LoginPartial">
 
@@ -71,7 +73,8 @@
                         <div class="d-flex m-3 me-0">
                             <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-danger"></i></button>
                             @await Component.InvokeAsync("Cart")
-                           
+                         
+
                         </div>
                     </div>
                 </nav>
@@ -96,13 +99,10 @@
             </div>
         </div>
         <!-- Modal Search End -->
-        <div style="min-height:400px;" class="hero-header" >
+        <div style="min-height:500px;">
             @RenderBody()
         </div>
-
-
-        @await Html.PartialAsync("_LayoutFooter");
-
+        @await Html.PartialAsync("_LayoutFooter")
     </div>
     <!-- Back to Top -->
     <a href="#" class="btn btn-danger border-3 border-danger rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
@@ -151,5 +151,35 @@
             $(this).addClass('active');
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Kiểm tra trạng thái đăng nhập khi người dùng thao tác
+            $("#cart-link").click(function (event) {
+                event.preventDefault(); // Ngăn chặn sự kiện mặc định khi người dùng nhấp vào liên kết
+
+                $.ajax({
+                    url: "/Account/CheckLoginStatus", // Đường dẫn tới action trong controller để kiểm tra trạng thái đăng nhập
+                    type: "GET",
+                    success: function (response) {
+                        if (response.loggedIn) {
+                            // Nếu người dùng đã đăng nhập, chuyển hướng đến trang index của giỏ hàng
+                            window.location.href = "/Cart/Index";
+                        } else {
+                            // Nếu người dùng chưa đăng nhập, hiển thị thông báo hoặc chuyển hướng đến trang đăng nhập/đăng ký
+                            alert("Please log in or register to access the cart.");
+                            window.location.href = "Identity/Account/Login";
+                            // window.location.href = "Identity/Account/Register";
+
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while checking login status.");
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>
