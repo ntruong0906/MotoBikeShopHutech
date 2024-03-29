@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MotoBikeShop.Data;
 
@@ -11,9 +12,11 @@ using MotoBikeShop.Data;
 namespace MotoBikeShop.Migrations
 {
     [DbContext(typeof(motoBikeVHDbContext))]
-    partial class motoBikeVHDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240329111712_nhanxet")]
+    partial class nhanxet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,7 +260,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC002",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 29, 18, 19, 41, 896, DateTimeKind.Local).AddTicks(6199),
+                            NgaySX = new DateTime(2024, 3, 29, 18, 17, 12, 25, DateTimeKind.Local).AddTicks(4713),
                             SoLanXem = 99,
                             TenAlias = "exciter",
                             TenHH = "Exciter"
@@ -272,7 +275,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC001",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 29, 18, 19, 41, 896, DateTimeKind.Local).AddTicks(6216),
+                            NgaySX = new DateTime(2024, 3, 29, 18, 17, 12, 25, DateTimeKind.Local).AddTicks(4727),
                             SoLanXem = 99,
                             TenAlias = "vario",
                             TenHH = "Vario"
@@ -287,7 +290,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC003",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 29, 18, 19, 41, 896, DateTimeKind.Local).AddTicks(6218),
+                            NgaySX = new DateTime(2024, 3, 29, 18, 17, 12, 25, DateTimeKind.Local).AddTicks(4728),
                             SoLanXem = 99,
                             TenAlias = "wave-rsx",
                             TenHH = "Wave RSX"

@@ -2,6 +2,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using MotoBikeShop.Data;
+using MotoBikeShop.Migrations;
 using MotoBikeShop.Repository;
 using MotoBikeShop.ViewModels;
 
@@ -92,6 +93,7 @@ using MotoBikeShop.ViewModels;
                 TenLoai = data.MaLoaiNavigation.TenLoai,
                 SoLuongTon = 10,//tính sau
                 DiemDanhGia = 5,//check sau
+               
             };
             return View(result);
         }

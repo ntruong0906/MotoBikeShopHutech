@@ -21,5 +21,6 @@
         public required int DiemDanhGia { get; set; }
         public required int SoLuongTon { get; set; }
 		public required int MaLoai { get; set; }
-	}
+     
+    }
 }
