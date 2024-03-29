@@ -1,4 +1,4 @@
-
+﻿
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MotoBikeShop.Data;
@@ -26,9 +26,16 @@ builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 builder.Services.AddScoped<IFactoryRepository, EFFactoryRepository>();
 //builder.Services.AddScoped<ICartService,EFCartService>();
+builder.Services.AddScoped<UserManager<ApplicationUser>>();
+builder.Services.AddScoped<SignInManager<ApplicationUser>>();
 builder.Services.AddRazorPages();
 builder.Services.AddDistributedMemoryCache();
-
+// đăng ký PaypalClient dạng Singleton() - chỉ có 1 instance duy nhất trong toàn ứng dụng
+//builder.Services.AddSingleton(x => new PaypalClient(
+//		builder.Configuration["PaypalOptions:AppId"],
+//		builder.Configuration["PaypalOptions:AppSecret"],
+//		builder.Configuration["PaypalOptions:Mode"]
+//));
 
 
 builder.Services.AddSession(options =>

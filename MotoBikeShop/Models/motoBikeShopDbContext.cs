@@ -27,7 +27,7 @@ public partial class motoBikeVHDbContext : IdentityDbContext<ApplicationUser>
 
     public  DbSet<YeuThich> YeuThiches { get; set; }
 
-
+    public DbSet<NhanXet> NhanXets { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var yourEntity1 = new Loai { MaLoai = 1, TenLoai = "Xe Côn", TenLoaiAlias = "xe-con", MoTa = "Xe này để đua ", Hinh = "xecon.png" };

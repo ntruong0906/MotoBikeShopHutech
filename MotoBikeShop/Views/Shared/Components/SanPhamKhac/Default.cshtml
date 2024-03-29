@@ -1,0 +1,21 @@
+﻿@using MotoBikeShop.Data
+
+
+@foreach(var item in Model)
+{
+	<div class="border border-danger rounded position-relative vesitable-item">
+		<div class="vesitable-img">
+			<a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.MaHH">
+				<img src="~/images/@item.Hinh" class="img-fluid w-100 rounded-top">
+			</a>
+		</div>
+		<div class="p-4 pb-0 rounded-bottom">
+			<a asp-action="Detail" asp-controller="HangHoa" asp-all-route-id="@item.MaHH"><h4>@item.TenHH</h4></a>
+			<p>@item.MoTa</p>
+			<div class="d-flex justify-content-between flex-lg-wrap">
+				<p class="text-dark fs-5 fw-bold">@item.DonGia.ToString("#,##0.00")VND</p>
+				<a asp-action="Detail" asp-controller="HangHoa" asp-all-route-id="@item.MaHH"><p>Chi Tiết</p></a>
+			</div>
+		</div>
+	</div>
+}

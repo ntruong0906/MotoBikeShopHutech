@@ -1,25 +1,30 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MotoBikeShop.Data;
 using MotoBikeShop.Helpers;
 using MotoBikeShop.Models;
 using MotoBikeShop.Repository;
 using MotoBikeShop.ViewModels;
+using System.Security.Claims;
 
 namespace MotoBikeShop.Controllers
 {
 	public class CartController : Controller
 	{
 		private readonly motoBikeVHDbContext db;
+        private readonly UserManager<ApplicationUser> _userManager;
+
         //private readonly ICartService _cartService;
-        public CartController(motoBikeVHDbContext context)
+        public CartController(motoBikeVHDbContext context, UserManager<ApplicationUser> userManager)
         {
             //, ICartService cartService
             //_cartService = cartService;
             db = context;
-		}
+            _userManager = userManager;
+        }
 
 		public List<CartItem> Cart => HttpContext.Session.Get<List<CartItem>>(MySetting.CART_KEY) ?? new List<CartItem>();
 
@@ -90,12 +95,11 @@ namespace MotoBikeShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                var customerId = HttpContext.User.Claims.SingleOrDefault(p => p.Type == MySetting.CLAIM_CUSTOMERID).Value;
+                var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var khachHang = new ApplicationUser();
                 if (model.GiongKhachHang)
                 {
-                    //khachHang = db.KhachHangs.SingleOrDefault(kh => kh.MaKh == customerId);
-                    khachHang = db.Users.SingleOrDefault(kh=>kh.Id == customerId);
+                    khachHang = db.Users.SingleOrDefault(kh => kh.Id == customerId);
                 }
 
                 var hoadon = new HoaDon
@@ -105,16 +109,17 @@ namespace MotoBikeShop.Controllers
                     DiaChi = model.DiaChi ?? khachHang.Address,
                     PhoneNumber = model.DienThoai ?? khachHang.PhoneNumber,
                     NgayDat = DateTime.Now,
-                    CachThanhToan = "COD",
+					NgayGiao = DateTime.Now.AddDays(3),
+					CachThanhToan = "COD",
                     CachVanChuyen = "J&T",
-                    MaTrangThai = 0,
-                    GhiChu = model.GhiChu
+                    MaTrangThai = 1,
+                    GhiChu = model.GhiChu,
+                    PhiVanChuyen = 30.0000,
                 };
 
                 db.Database.BeginTransaction();
                 try
                 {
-                    db.Database.CommitTransaction();
                     db.Add(hoadon);
                     db.SaveChanges();
 
@@ -133,43 +138,99 @@ namespace MotoBikeShop.Controllers
                     db.AddRange(cthds);
                     db.SaveChanges();
 
+                    db.Database.CommitTransaction();
+
                     HttpContext.Session.Set<List<CartItem>>(MySetting.CART_KEY, new List<CartItem>());
 
                     return View("Success");
                 }
                 catch
                 {
+                    return View("Error");
                     db.Database.RollbackTransaction();
                 }
             }
 
             return View(Cart);
         }
-        //[HttpPost]
-        //public IActionResult UpdateQuantity(int id, int quantity)
-        //{
-        //    // Tìm sản phẩm trong giỏ hàng dựa trên id
-        //    var cartItem = _cartService.FindCartItemById(id);
+        public IActionResult Success()
+        {
+            return View();
+        }
+        public IActionResult Error()
+        {
+            return View();
+        }
+		//[HttpPost]
+		//public IActionResult UpdateQuantity(int id, int quantity)
+		//{
+		//    // Tìm sản phẩm trong giỏ hàng dựa trên id
+		//    var cartItem = _cartService.FindCartItemById(id);
 
-        //    if (cartItem == null)
-        //    {
-        //        return Json(new { success = false, message = "Sản phẩm không tồn tại trong giỏ hàng." });
-        //    }
+		//    if (cartItem == null)
+		//    {
+		//        return Json(new { success = false, message = "Sản phẩm không tồn tại trong giỏ hàng." });
+		//    }
 
-        //    // Kiểm tra xem số lượng mới có hợp lệ hay không
-        //    if (quantity < 1 || quantity > cartItem.SoLuong)
-        //    {
-        //        return Json(new { success = false, message = "Số lượng không hợp lệ." });
-        //    }
+		//    // Kiểm tra xem số lượng mới có hợp lệ hay không
+		//    if (quantity < 1 || quantity > cartItem.SoLuong)
+		//    {
+		//        return Json(new { success = false, message = "Số lượng không hợp lệ." });
+		//    }
 
-        //    // Cập nhật số lượng sản phẩm
-        //    cartItem.SoLuong = quantity;
+		//    // Cập nhật số lượng sản phẩm
+		//    cartItem.SoLuong = quantity;
 
-        //    // Lưu thay đổi vào cơ sở dữ liệu hoặc quản lý giỏ hàng của bạn
+		//    // Lưu thay đổi vào cơ sở dữ liệu hoặc quản lý giỏ hàng của bạn
 
-        //    // Trả về kết quả thành công
-        //    return Json(new { success = true });
-        //}
+		//    // Trả về kết quả thành công
+		//    return Json(new { success = true });
+		//}
+		//[Authorize]
+		//public IActionResult PaymentSuccess()
+		//{
+		//	return View("Success");
+		//}
 
-    }
+		//[Authorize]
+		//[HttpPost("/Cart/create-paypal-order")]
+		//public async Task<IActionResult> CreatePaypalOrder(CancellationToken cancellationToken)
+		//{
+		//	// Thông tin đơn hàng gửi qua Paypal
+		//	var tongTien = Cart.Sum(p => p.ThanhTien).ToString();
+		//	var donViTienTe = "USD";
+		//	var maDonHangThamChieu = "DH" + DateTime.Now.Ticks.ToString();
+
+		//	try
+		//	{
+		//		var response = await _paypalClient.CreateOrder(tongTien, donViTienTe, maDonHangThamChieu);
+
+		//		return Ok(response);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		var error = new { ex.GetBaseException().Message };
+		//		return BadRequest(error);
+		//	}
+		//}
+
+		//[Authorize]
+		//[HttpPost("/Cart/capture-paypal-order")]
+		//public async Task<IActionResult> CapturePaypalOrder(string orderID, CancellationToken cancellationToken)
+		//{
+		//	try
+		//	{
+		//		var response = await _paypalClient.CaptureOrder(orderID);
+
+		//		// Lưu database đơn hàng của mình
+
+		//		return Ok(response);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		var error = new { ex.GetBaseException().Message };
+		//		return BadRequest(error);
+		//	}
+		//}
+	}
 }

@@ -17,26 +17,39 @@ using MotoBikeShop.ViewModels;
             {
                 db = context;
         }
-            public IActionResult Index(int? loai)
+        public IActionResult Index(int? loai, int? page)
+        {
+            var hanghoas = db.HangHoas.AsQueryable();
+            if (loai.HasValue)
             {
-                var hanghoas = db.HangHoas.AsQueryable();
-                if (loai.HasValue)
-                {
-                    hanghoas = hanghoas.Where(p => p.MaLoai == loai.Value);
-
-                }
-                var result = hanghoas.Select(p => new HangHoaVM
-                {
-                    MaHh = p.MaHH,
-                    TenHh = p.TenHH,
-                    DonGia = p.DonGia ?? 0,
-                    Hinh = p.Hinh ?? "",
-                    MoTaNgan = p.MoTaDonVi ?? "",
-                    TenLoai = p.MaLoaiNavigation.TenLoai
-                });
-                return View(result);
+                hanghoas = hanghoas.Where(p => p.MaLoai == loai.Value);
             }
-            public IActionResult Search(String? query)
+
+            int pageSize = 2; // Số lượng sản phẩm trên mỗi trang
+            int pageNumber = page ?? 1; // Trang hiện tại
+
+            var pagedHanghoas = hanghoas.Select(p => new HangHoaVM
+            {
+                MaHh = p.MaHH,
+                TenHh = p.TenHH,
+                DonGia = p.DonGia ?? 0,
+                Hinh = p.Hinh ?? "",
+                MoTaNgan = p.MoTaDonVi ?? "",
+                TenLoai = p.MaLoaiNavigation.TenLoai
+            })
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+            int totalItems = hanghoas.Count();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            ViewBag.CurrentPage = pageNumber;
+            ViewBag.TotalPages = totalPages;
+
+            return View(pagedHanghoas);
+        }
+        public IActionResult Search(String? query)
             {
                 var hanghoas = db.HangHoas.AsQueryable();
                 if (query != null)
@@ -68,6 +81,8 @@ using MotoBikeShop.ViewModels;
 
             var result = new CTHangHoaVM
             {
+
+				MaLoai=data.MaLoai,
                 MaHh = data.MaHH,
                 TenHh = data.TenHH,
                 DonGia = data.DonGia ?? 0,
@@ -80,7 +95,13 @@ using MotoBikeShop.ViewModels;
             };
             return View(result);
         }
-        
+        [HttpGet]
+        public IActionResult GetMoreProducts(int skip, int take)
+        {
+            var products = db.HangHoas.Skip(skip).Take(take).ToList();
+            return Json(products);
+        }
+
 
     }
 

@@ -83,5 +83,6 @@ namespace MotoBikeShop.Areas.Admin
             return image.FileName; // Trả về đường dẫn tương đối
         }
 
+
     }
 }
