@@ -12,6 +12,7 @@ namespace MotoBikeShop.ViewModels
         public double DonGia { get; set; }
         public int SoLuong { get; set; }
         public double ThanhTien => SoLuong * DonGia;
+
        
     }
 }

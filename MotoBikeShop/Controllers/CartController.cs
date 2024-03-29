@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using MotoBikeShop.Data;
 using MotoBikeShop.Helpers;
 using MotoBikeShop.Models;
+using MotoBikeShop.Momo;
 using MotoBikeShop.Repository;
 using MotoBikeShop.ViewModels;
+using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 
 namespace MotoBikeShop.Controllers
@@ -161,76 +163,92 @@ namespace MotoBikeShop.Controllers
         {
             return View();
         }
-		//[HttpPost]
-		//public IActionResult UpdateQuantity(int id, int quantity)
-		//{
-		//    // Tìm sản phẩm trong giỏ hàng dựa trên id
-		//    var cartItem = _cartService.FindCartItemById(id);
 
-		//    if (cartItem == null)
-		//    {
-		//        return Json(new { success = false, message = "Sản phẩm không tồn tại trong giỏ hàng." });
-		//    }
 
-		//    // Kiểm tra xem số lượng mới có hợp lệ hay không
-		//    if (quantity < 1 || quantity > cartItem.SoLuong)
-		//    {
-		//        return Json(new { success = false, message = "Số lượng không hợp lệ." });
-		//    }
+		public IActionResult Payment(CartItem model)
+		{
 
-		//    // Cập nhật số lượng sản phẩm
-		//    cartItem.SoLuong = quantity;
+           
+			//request params need to request to MoMo system
+			string endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor";
+			string partnerCode = "MOMOOJOI20210710";
+			string accessKey = "iPXneGmrJH0G8FOP";
+			string serectkey = "sFcbSGRSJjwGxwhhcEktCHWYUuTuPNDB";
+			string orderInfo = "MotoBike Shop";
+			string returnUrl = "https://localhost:44375/Cart/ConfirmPaymentClient";
+			string notifyurl = "https://localhost:44375/Cart/SavePayment"; //lưu ý: notifyurl không được sử dụng localhost, có thể sử dụng ngrok để public localhost trong quá trình test
 
-		//    // Lưu thay đổi vào cơ sở dữ liệu hoặc quản lý giỏ hàng của bạn
+            //String amount = model.ThanhTien.ToString();
+			string orderid = DateTime.Now.Ticks.ToString(); //mã đơn hàng
+			string requestId = DateTime.Now.Ticks.ToString();
+			string extraData = "";
 
-		//    // Trả về kết quả thành công
-		//    return Json(new { success = true });
-		//}
-		//[Authorize]
-		//public IActionResult PaymentSuccess()
-		//{
-		//	return View("Success");
-		//}
+			//Before sign HMAC SHA256 signature
+			string rawHash = "partnerCode=" +
+				partnerCode + "&accessKey=" +
+				accessKey + "&requestId=" +
+				requestId + "&amount=" +
+				amount + "&orderId=" +
+				orderid + "&orderInfo=" +
+				orderInfo + "&returnUrl=" +
+				returnUrl + "&notifyUrl=" +
+				notifyurl + "&extraData=" +
+				extraData;
 
-		//[Authorize]
-		//[HttpPost("/Cart/create-paypal-order")]
-		//public async Task<IActionResult> CreatePaypalOrder(CancellationToken cancellationToken)
-		//{
-		//	// Thông tin đơn hàng gửi qua Paypal
-		//	var tongTien = Cart.Sum(p => p.ThanhTien).ToString();
-		//	var donViTienTe = "USD";
-		//	var maDonHangThamChieu = "DH" + DateTime.Now.Ticks.ToString();
+			MoMoSecurity crypto = new MoMoSecurity();
+			//sign signature SHA256
+			string signature = crypto.signSHA256(rawHash, serectkey);
 
-		//	try
-		//	{
-		//		var response = await _paypalClient.CreateOrder(tongTien, donViTienTe, maDonHangThamChieu);
+			//build body json request
+			JObject message = new JObject
+			{
+				{ "partnerCode", partnerCode },
+				{ "accessKey", accessKey },
+				{ "requestId", requestId },
+				{ "amount", amount },
+				{ "orderId", orderid },
+				{ "orderInfo", orderInfo },
+				{ "returnUrl", returnUrl },
+				{ "notifyUrl", notifyurl },
+				{ "extraData", extraData },
+				{ "requestType", "captureMoMoWallet" },
+				{ "signature", signature }
 
-		//		return Ok(response);
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		var error = new { ex.GetBaseException().Message };
-		//		return BadRequest(error);
-		//	}
-		//}
+			};
 
-		//[Authorize]
-		//[HttpPost("/Cart/capture-paypal-order")]
-		//public async Task<IActionResult> CapturePaypalOrder(string orderID, CancellationToken cancellationToken)
-		//{
-		//	try
-		//	{
-		//		var response = await _paypalClient.CaptureOrder(orderID);
+			string responseFromMomo = PaymentRequest.sendPaymentRequest(endpoint, message.ToString());
 
-		//		// Lưu database đơn hàng của mình
+			JObject jmessage = JObject.Parse(responseFromMomo);
 
-		//		return Ok(response);
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		var error = new { ex.GetBaseException().Message };
-		//		return BadRequest(error);
-		//	}
-		//}
+			if (jmessage.TryGetValue("payUrl", out JToken payUrlToken))
+			{
+				return Redirect(payUrlToken.ToString());
+			}
+			else
+			{
+				// Handle error when "payUrl" does not exist in the response
+				// For example, you may want to redirect to an error page or back to the checkout form
+				return View("Error");
+			}
+		}
+
+		//Khi thanh toán xong ở cổng thanh toán Momo, Momo sẽ trả về một số thông tin, trong đó có errorCode để check thông tin thanh toán
+		//errorCode = 0 : thanh toán thành công (Request.QueryString["errorCode"])
+		//Tham khảo bảng mã lỗi tại: https://developers.momo.vn/#/docs/aio/?id=b%e1%ba%a3ng-m%c3%a3-l%e1%bb%97i
+		public IActionResult ConfirmPaymentClient(Result result)
+		{
+			//lấy kết quả Momo trả về và hiển thị thông báo cho người dùng (có thể lấy dữ liệu ở đây cập nhật xuống db)
+			string rMessage = result.message;
+			string rOrderId = result.orderId;
+			string rErrorCode = result.errorCode; // = 0: thanh toán thành công
+			return View();
+		}
+
+		[HttpPost]
+		public void SavePayment()
+		{
+			//cập nhật dữ liệu vào db
+		
+		}
 	}
 }

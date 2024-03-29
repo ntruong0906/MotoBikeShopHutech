@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MotoBikeShop.Data;
 
@@ -11,9 +12,11 @@ using MotoBikeShop.Data;
 namespace MotoBikeShop.Migrations
 {
     [DbContext(typeof(motoBikeVHDbContext))]
-    partial class motoBikeVHDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240329175451_modelmomo")]
+    partial class modelmomo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,7 +260,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC002",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 30, 1, 22, 50, 112, DateTimeKind.Local).AddTicks(3620),
+                            NgaySX = new DateTime(2024, 3, 30, 0, 54, 50, 267, DateTimeKind.Local).AddTicks(657),
                             SoLanXem = 99,
                             TenAlias = "exciter",
                             TenHH = "Exciter"
@@ -272,7 +275,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC001",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 30, 1, 22, 50, 112, DateTimeKind.Local).AddTicks(3639),
+                            NgaySX = new DateTime(2024, 3, 30, 0, 54, 50, 267, DateTimeKind.Local).AddTicks(674),
                             SoLanXem = 99,
                             TenAlias = "vario",
                             TenHH = "Vario"
@@ -287,7 +290,7 @@ namespace MotoBikeShop.Migrations
                             MaNCC = "NCC003",
                             MoTa = "xe này cực đẹp",
                             MoTaDonVi = "VND",
-                            NgaySX = new DateTime(2024, 3, 30, 1, 22, 50, 112, DateTimeKind.Local).AddTicks(3640),
+                            NgaySX = new DateTime(2024, 3, 30, 0, 54, 50, 267, DateTimeKind.Local).AddTicks(676),
                             SoLanXem = 99,
                             TenAlias = "wave-rsx",
                             TenHH = "Wave RSX"
@@ -597,6 +600,70 @@ namespace MotoBikeShop.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("MotoBikeShop.Models.CollectionLinkRequest", b =>
+                {
+                    b.Property<string>("requestId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("amount")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("autoCapture")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("extraData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ipnUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("lang")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("orderGroupId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("orderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("orderInfo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("partnerCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("partnerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("redirectUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("requestType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("signature")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("storeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("requestId");
+
+                    b.ToTable("collectionLinkRequests");
+                });
+
             modelBuilder.Entity("MotoBikeShop.Models.NhanXet", b =>
                 {
                     b.Property<string>("MaGy")
@@ -625,72 +692,6 @@ namespace MotoBikeShop.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("NhanXets");
-                });
-
-            modelBuilder.Entity("MotoBikeShop.Models.Result", b =>
-                {
-                    b.Property<string>("partnerCode")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("accessKey")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("amount")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("errorCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("extraData")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("localMessage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("orderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("orderInfo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("orderType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("payType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("requestId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("responseTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("signature")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("transId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("partnerCode");
-
-                    b.ToTable("results");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
