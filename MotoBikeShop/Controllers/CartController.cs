@@ -178,7 +178,7 @@ namespace MotoBikeShop.Controllers
 			string returnUrl = "https://localhost:44375/Cart/ConfirmPaymentClient";
 			string notifyurl = "https://localhost:44375/Cart/SavePayment"; //lưu ý: notifyurl không được sử dụng localhost, có thể sử dụng ngrok để public localhost trong quá trình test
 
-            //String amount = model.ThanhTien.ToString();
+            string amount = "10000000";
 			string orderid = DateTime.Now.Ticks.ToString(); //mã đơn hàng
 			string requestId = DateTime.Now.Ticks.ToString();
 			string extraData = "";
