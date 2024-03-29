@@ -24,7 +24,8 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/Loais
+        // GET: Admin/Category
+        [HttpGet]
         [Route("")]
         [Route("Index")]
         public async Task<IActionResult> Index()
@@ -32,7 +33,9 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(await _context.Loais.ToListAsync());
         }
 
-        // GET: Admin/Loais/Details/5
+        // GET: Admin/Category/Details/5
+        [HttpGet]
+        [Route("Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -50,17 +53,18 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(loai);
         }
 
-        // GET: Admin/Loais/Create
+        // GET: Admin/Category/Create
+        [HttpGet]
+        [Route("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/Loais/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Admin/Category/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Create")]
         public async Task<IActionResult> Create([Bind("MaLoai,TenLoai,TenLoaiAlias,MoTa,Hinh")] Loai loai)
         {
             if (ModelState.IsValid)
@@ -72,7 +76,9 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(loai);
         }
 
-        // GET: Admin/Loais/Edit/5
+        // GET: Admin/Category/Edit/5
+        [HttpGet]
+        [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,11 +94,10 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(loai);
         }
 
-        // POST: Admin/Loais/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Admin/Category/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(int id, [Bind("MaLoai,TenLoai,TenLoaiAlias,MoTa,Hinh")] Loai loai)
         {
             if (id != loai.MaLoai)
@@ -123,7 +128,9 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(loai);
         }
 
-        // GET: Admin/Loais/Delete/5
+        // GET: Admin/Category/Delete/5
+        [HttpGet]
+        [Route("Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,9 +148,10 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(loai);
         }
 
-        // POST: Admin/Loais/Delete/5
+        // POST: Admin/Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var loai = await _context.Loais.FindAsync(id);

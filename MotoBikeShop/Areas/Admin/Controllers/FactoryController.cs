@@ -24,7 +24,8 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/NhaCungCaps
+        // GET: Admin/Factory
+        [HttpGet]
         [Route("")]
         [Route("Index")]
         public async Task<IActionResult> Index()
@@ -32,7 +33,9 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(await _context.NhaCungCaps.ToListAsync());
         }
 
-        // GET: Admin/NhaCungCaps/Details/5
+        // GET: Admin/Factory/Details/5
+        [HttpGet]
+        [Route("Details/{id}")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -50,17 +53,18 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(nhaCungCap);
         }
 
-        // GET: Admin/NhaCungCaps/Create
+        // GET: Admin/Factory/Create
+        [HttpGet]
+        [Route("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/NhaCungCaps/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Admin/Factory/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Create")]
         public async Task<IActionResult> Create([Bind("MaNCC,TenCongTy,Logo,NguoiLienLac,Email,DienThoai,DiaChi,MoTa")] NhaCungCap nhaCungCap)
         {
             if (ModelState.IsValid)
@@ -72,7 +76,9 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(nhaCungCap);
         }
 
-        // GET: Admin/NhaCungCaps/Edit/5
+        // GET: Admin/Factory/Edit/5
+        [HttpGet]
+        [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -88,11 +94,10 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(nhaCungCap);
         }
 
-        // POST: Admin/NhaCungCaps/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Admin/Factory/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(string id, [Bind("MaNCC,TenCongTy,Logo,NguoiLienLac,Email,DienThoai,DiaChi,MoTa")] NhaCungCap nhaCungCap)
         {
             if (id != nhaCungCap.MaNCC)
@@ -123,7 +128,9 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(nhaCungCap);
         }
 
-        // GET: Admin/NhaCungCaps/Delete/5
+        // GET: Admin/Factory/Delete/5
+        [HttpGet]
+        [Route("Delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -141,9 +148,10 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             return View(nhaCungCap);
         }
 
-        // POST: Admin/NhaCungCaps/Delete/5
+        // POST: Admin/Factory/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var nhaCungCap = await _context.NhaCungCaps.FindAsync(id);
