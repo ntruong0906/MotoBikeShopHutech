@@ -57,7 +57,8 @@ namespace MotoBikeShop.Areas.Admin
         }
         // Xử lý thêm sản phẩm mới
         [HttpPost]
-        public async Task<IActionResult> Create(HangHoa product, IFormFile imageUrl)
+		[Route("Create")]
+		public async Task<IActionResult> Create(HangHoa product, IFormFile imageUrl)
         {
             if (!ModelState.IsValid)
             {

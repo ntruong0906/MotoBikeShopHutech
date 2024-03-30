@@ -1,22 +1,30 @@
-﻿    using Microsoft.AspNetCore.Cors.Infrastructure;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using MotoBikeShop.Data;
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MotoBikeShop.Data;
 using MotoBikeShop.Migrations;
+using MotoBikeShop.Models;
 using MotoBikeShop.Repository;
 using MotoBikeShop.ViewModels;
+using Newtonsoft.Json;
+using System.Net.Http;
+using static MotoBikeShop.Service.Models;
 
-    namespace MotoBikeShop.Controllers
-    {
-        public class HangHoaController : Controller
+namespace MotoBikeShop.Controllers
+{
+    public class HangHoaController : Controller
         {
             //private readonly ICartService _cartService;
             private readonly motoBikeVHDbContext db;
 
-            
+        private readonly HttpClient _httpClient;
+      
+           
         public HangHoaController(motoBikeVHDbContext context)
             {
                 db = context;
+                _httpClient = new HttpClient();
+            
         }
         public IActionResult Index(int? loai, int? page)
         {
@@ -26,7 +34,7 @@ using MotoBikeShop.ViewModels;
                 hanghoas = hanghoas.Where(p => p.MaLoai == loai.Value);
             }
 
-            int pageSize = 2; // Số lượng sản phẩm trên mỗi trang
+            int pageSize = 1; // Số lượng sản phẩm trên mỗi trang
             int pageNumber = page ?? 1; // Trang hiện tại
 
             var pagedHanghoas = hanghoas.Select(p => new HangHoaVM
@@ -104,7 +112,7 @@ using MotoBikeShop.ViewModels;
             return Json(products);
         }
 
-
-    }
+  
+	}
 
     }

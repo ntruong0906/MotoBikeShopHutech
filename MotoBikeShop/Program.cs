@@ -25,8 +25,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 builder.Services.AddScoped<IFactoryRepository, EFFactoryRepository>();
-builder.Services.AddScoped<IReviewRepository, EFReviewRepository>();
-//builder.Services.AddScoped<ICartService,EFCartService>();
 builder.Services.AddScoped<UserManager<ApplicationUser>>();
 builder.Services.AddScoped<SignInManager<ApplicationUser>>();
 builder.Services.AddRazorPages();

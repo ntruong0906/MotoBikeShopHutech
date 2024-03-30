@@ -2,7 +2,7 @@
 
 namespace MotoBikeShop.Models
 {
-	public class Result
+	public class MoMo
 	{
 		[Key]
 		public string partnerCode { get; set; }

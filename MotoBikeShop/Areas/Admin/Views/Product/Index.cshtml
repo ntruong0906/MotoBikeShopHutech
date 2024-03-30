@@ -3,93 +3,82 @@
 @{
     ViewData["Title"] = "Index";
 }
+<style>
+    .product-card {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Đảm bảo rằng các card có cùng chiều cao */
+    }
 
-<h1>Index</h1>
+        .product-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TenHH)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TenAlias)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MoTaDonVi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DonGia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hinh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgaySX)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GiamGia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SoLanXem)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MoTa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaLoaiNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaNccNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenHH)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenAlias)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MoTaDonVi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DonGia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hinh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgaySX)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GiamGia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SoLanXem)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MoTa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaLoaiNavigation.TenLoai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaNccNavigation.MaNCC)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MaHH">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MaHH">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MaHH">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    .product-image {
+        flex: 1;
+        object-fit: cover;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .product-title {
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .product-price {
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        margin-bottom: 10px;
+    }
+</style>
+
+<body>
+
+    <!-- Phần header -->
+    <header class="header">
+        <a asp-action="Create" class="btn" style="background-color:palegreen; color: white"> + Create New</a>
+    </header>
+
+    <!-- Phần body -->
+    <div class="container">
+        <h2>Products</h2>
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="card product-card">
+                        <img class="card-img-top product-image" src="~/images/@product.Hinh" alt="Product Image">
+                        <div class="card-body product-details">
+                            <h5 class="card-title product-title">@product.TenHH</h5>
+                            <p class="card-text product-price">@product.TenAlias</p>
+                            <p class="card-text product-price">@product.MoTaDonVi</p>
+                            <p class="card-text product-price"> @product.DonGia</p>
+                            <p class="card-text product-price">@product.NgaySX</p>
+                            <p class="card-text product-price">@product.GiamGia</p>
+                            <p class="card-text product-price">@product.SoLanXem</p>
+                            <p class="card-text product-description">@product.MoTa</p>
+                            <p class="card-text product-price">@product.MaLoaiNavigation.TenLoai</p>
+                            <p class="card-text product-price">@product.MaNCC</p>
+
+
+                        </div>
+                        <div class="card-footer product-actions">
+                            <a asp-action="Detail" class="btn btn-info">View</a>
+                            <a asp-action="Edit" class="btn btn-warning">Edit</a>
+                            <a asp-action="Delete" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</body>
