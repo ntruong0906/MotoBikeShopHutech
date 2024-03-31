@@ -20,7 +20,7 @@ namespace MotoBikeShop.Repository
         {
             // return await _context.Products.FindAsync(id);
             // lấy thông tin kèm theo category
-            return await _context.HangHoas.Include(p => p.MaLoaiNavigation).FirstOrDefaultAsync(p => p.MaLoai == id);
+            return await _context.HangHoas.Include(p => p.MaLoaiNavigation).FirstOrDefaultAsync(p => p.MaHH == id);
         }
         public async Task AddAsync(HangHoa product)
         {

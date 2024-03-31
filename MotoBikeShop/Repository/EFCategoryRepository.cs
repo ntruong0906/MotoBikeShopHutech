@@ -19,7 +19,7 @@ namespace MotoBikeShop.Repository
         }
         public async Task<Loai> GetByIdAsync(int id)
         {
-            return await _context.Loais.FindAsync(id);
+            return await _context.Loais.Include(p => p.HangHoas).FirstOrDefaultAsync(p => p.MaLoai == id);
         }
         public async Task AddAsync(Loai category)
         {

@@ -75,6 +75,7 @@ namespace MotoBikeShop.Areas.Admin.Controllers
             }
             return View(nhaCungCap);
         }
+        
 
         // GET: Admin/Factory/Edit/5
         [HttpGet]
